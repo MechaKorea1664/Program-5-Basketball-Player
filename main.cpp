@@ -11,9 +11,6 @@ using namespace std;
 // Directions here:
 // https://umkc.app.box.com/s/1jti79n05j1nnxi7e9hsl00ifkwog26w
 
-// IMPORTANT, LOOK HERE: (for me)
-// https://www.geeksforgeeks.org/csv-file-management-using-c/#
-
 vector<BasketBallPlayer*> sortVector(vector<BasketBallPlayer*> input) {
     int size = input.size(), largestIndex, removeCount = 0;
     vector<BasketBallPlayer*> sortedInput;
@@ -21,6 +18,7 @@ vector<BasketBallPlayer*> sortVector(vector<BasketBallPlayer*> input) {
         // cout << "Processing size: "<< size << " of " << removeCount+1 << endl; // use for testing.
         largestIndex = 0;
         for (int j = 0; j < size - removeCount; j++) {
+            // Find the index of the best player (highest playerValue and Eff Rating).
             if (input[j]->getValue() > input[largestIndex]->getValue()) {
                 largestIndex = j;
             }
@@ -30,6 +28,8 @@ vector<BasketBallPlayer*> sortVector(vector<BasketBallPlayer*> input) {
                 }
             }
         }
+        // Push back the player at largestIndex to sortedInput, and erase the player from input,
+        // to prevent duplication.
         sortedInput.push_back(input[largestIndex]);
         input.erase(input.begin() + largestIndex);
         removeCount++; i--;
@@ -96,6 +96,10 @@ int main() {
 
     // Sort the entire basketball player vector from best to worst.
     vector<BasketBallPlayer*> sortedBBPVector = sortVector(bbpVector);
+
+    // Create teams based on given players.
+    // Note: any players with 0 Eff Rating are ignored in team creation process.
+    // 0 Eff Rating conditions are in basketballplayer.cpp, in setEffRating().
 
     // NCAA TEAM
     // Create a team of 12 best college basketball players.
@@ -183,7 +187,8 @@ int main() {
     // Make a copy of the total team vector.
     vector<BasketBallPlayer*> bbpVectorCopy = sortedBBPVector;
 
-    // First, choose 2 best forward and guard positions.
+    // First, choose a best center and 2 best forward and guard positions.
+    // Selected players will be erased from the vector to prevent duplication.
     vector<BasketBallPlayer*> teamPro;
     int removeCount = 0;
     numCenter = 0; numForward = 0; numGuard = 0;

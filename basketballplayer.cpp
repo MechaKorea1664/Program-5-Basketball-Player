@@ -96,6 +96,7 @@ int BasketBallPlayer::getPoints(){
     return pts;
 }
 void BasketBallPlayer::setEffRating(){
+    // If player does not have enough games, output error message to file (append), and set Eff Rating to 0.
     if (games <= 5) {
         ofstream outFS;
         outFS.open("output.txt", ios_base::app);
